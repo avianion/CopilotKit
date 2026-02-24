@@ -39,13 +39,11 @@ export function middleware(request: NextRequest) {
     "/api-reference": "/reference",
 
     // Quickstart variations
-    "/quickstart": "/direct-to-llm/guides/quickstart",
-    "/getting-started": "/direct-to-llm/guides/quickstart",
-    "/start": "/direct-to-llm/guides/quickstart",
+    "/getting-started": "/quickstart",
+    "/start": "/quickstart",
 
     // Frontend tools variations
-    "/frontend-tools": "/direct-to-llm/guides/frontend-actions",
-    "/frontend-actions": "/direct-to-llm/guides/frontend-actions",
+    "/frontend-tools": "/frontend-actions",
 
     // Contributing paths
     "/contributing/code-contributions/package-linking":
@@ -69,12 +67,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(newPath, request.url));
   }
 
-  // Handle quickstart redirects for specific frameworks
-  if (pathname === "/quickstart") {
-    return NextResponse.redirect(
-      new URL("/direct-to-llm/guides/quickstart", request.url),
-    );
-  }
 
   // Check for partial matches and suggest alternatives
   const suggestions = generateSuggestions(pathname);

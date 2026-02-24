@@ -454,6 +454,32 @@ const config = {
         destination: "/langgraph/shared-state/workflow-execution",
         permanent: true,
       },
+      // Learn tab — content moved from root
+      {
+        source: '/agentic-protocols',
+        destination: '/learn/agentic-protocols',
+        permanent: true,
+      },
+      {
+        source: '/ag-ui-protocol',
+        destination: '/learn/ag-ui-protocol',
+        permanent: true,
+      },
+      {
+        source: '/connect-mcp-servers',
+        destination: '/learn/connect-mcp-servers',
+        permanent: true,
+      },
+      {
+        source: '/a2a-protocol',
+        destination: '/learn/a2a-protocol',
+        permanent: true,
+      },
+      {
+        source: '/architecture',
+        destination: '/learn/architecture',
+        permanent: true,
+      },
     ];
 
     // Combine auto-generated and manual redirects

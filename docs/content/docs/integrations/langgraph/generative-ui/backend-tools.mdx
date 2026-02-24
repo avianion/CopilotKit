@@ -109,27 +109,33 @@ when your agent is calling tools. CopilotKit allows you to fully customize how t
 <Step>
 ### Render the tool call in your frontend
 At this point, your agent will be able to call the `get_weather` tool. Now
-we just need to add a `useCopilotAction` hook to render the tool call in
+we just need to add a `useRenderTool` hook to render the tool call in
 the UI.
 
 <Callout type="info" title="Important">
-  In order to render a tool call in the UI, the name of the action must match the name of the tool.
+  In order to render a tool call in the UI, the name must match the name of the tool.
 </Callout>
 
 ```tsx title="app/page.tsx"
-import { useRenderToolCall } from "@copilotkit/react-core"; // [!code highlight]
+import { useRenderTool } from "@copilotkit/react-core/v2"; // [!code highlight]
+import { z } from "zod";
 // ...
+
+const weatherParams = z.object({
+  location: z.string().describe("The location to get weather for"),
+});
 
 const YourMainContent = () => {
   // ...
-  // [!code highlight:12]
-  useRenderToolCall({
+  // [!code highlight:14]
+  useRenderTool({
     name: "get_weather",
-    render: ({status, args}) => {
+    parameters: weatherParams,
+    render: ({ status, parameters }) => {
       return (
         <p className="text-gray-500 mt-2">
           {status !== "complete" && "Calling weather API..."}
-          {status === "complete" && `Called the weather API for ${args.location}.`}
+          {status === "complete" && `Called the weather API for ${parameters.location}.`}
         </p>
       );
     },

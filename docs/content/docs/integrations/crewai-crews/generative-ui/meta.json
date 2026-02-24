@@ -1,0 +1,10 @@
+{
+  "title": "Generative UI",
+  "icon": "lucide/Paintbrush",
+  "pages": [
+    "render-only",
+    "state-rendering",
+    "mcp-apps",
+    "a2ui"
+  ]
+}

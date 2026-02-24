@@ -8,7 +8,7 @@ import InstallSDKSnippet from "@/snippets/install-sdk.mdx"
 
 <Callout type="error">
     The usage of node based interrupt is [now discouraged](https://docs.langchain.com/oss/python/langgraph/interrupts) by both LangGraph and CopilotKit.
-    As of LangGraph 0.2.57, the recommended way to set breakpoints is using [the interrupt function](https://docs.copilotkit.ai/coagents/human-in-the-loop/interrupt-flow) as it simplifies human-in-the-loop patterns.
+    As of LangGraph 0.2.57, the recommended way to set breakpoints is using [the interrupt function](https://docs.copilotkit.ai/langgraph/human-in-the-loop/interrupt-flow) as it simplifies human-in-the-loop patterns.
 </Callout>
 
 <video src="https://cdn.copilotkit.ai/docs/copilotkit/images/coagents/node-hitl.mp4" className="rounded-lg shadow-xl" loop playsInline controls autoPlay muted />
@@ -51,26 +51,27 @@ is interrupted and then resumes execution from where it left off, unaware of the
         First, we'll create a component that renders the agent's essay draft and waits for user approval.
 
         ```tsx title="ui/app/page.tsx"
-        import { useHumanInTheLoop } from "@copilotkit/react-core"
+        import { useHumanInTheLoop } from "@copilotkit/react-core/v2" // [!code highlight]
         import { Markdown } from "@copilotkit/react-ui"
+        import { z } from "zod";
 
         function YourMainContent() {
           // ...
 
-          useHumanInTheLoop({ 
+          // [!code highlight:28]
+          useHumanInTheLoop({
             name: "writeEssay",
             description: "Writes an essay and takes the draft as an argument.",
-            parameters: [
-              { name: "draft", type: "string", description: "The draft of the essay", required: true },
-            ],
-            // [!code highlight:25]
+            parameters: z.object({
+              draft: z.string().describe("The draft of the essay"),
+            }),
             render: ({ args, respond, status }) => {
               return (
                 <div>
                   <Markdown content={args.draft || 'Preparing your draft...'} />
-                  
+
                   <div className={`flex gap-4 pt-4 ${status !== "executing" ? "hidden" : ""}`}>
-                    <button 
+                    <button
                       onClick={() => respond?.("CANCEL")}
                       disabled={status !== "executing"}
                       className="border p-2 rounded-xl w-full"
@@ -79,7 +80,7 @@ is interrupted and then resumes execution from where it left off, unaware of the
                     </button>
                     <button
                       onClick={() => respond?.("SEND")}
-                      disabled={status !== "executing"} 
+                      disabled={status !== "executing"}
                       className="bg-blue-500 text-white p-2 rounded-xl w-full"
                     >
                       Approve Draft

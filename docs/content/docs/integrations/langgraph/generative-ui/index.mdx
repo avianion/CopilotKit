@@ -2,8 +2,9 @@
 title: Generative UI
 icon: "lucide/Paintbrush"
 description: Render your agent's behavior with custom UI components.
+hideTOC: true
 ---
-import { ServerIcon, SquareMousePointerIcon, BotIcon } from "lucide-react";
+import { Eye, CirclePause, Server, Bot, Monitor, FileJson } from "lucide-react";
 
 <Frame>
   <img
@@ -13,42 +14,47 @@ import { ServerIcon, SquareMousePointerIcon, BotIcon } from "lucide-react";
   />
 </Frame>
 
-<Callout>
-    This example shows our [Research Canvas](/langgraph/videos/research-canvas) making use of Generative UI!
-</Callout>
-
 ## What is Generative UI?
 
-Generative UI lets you render your agent's state, progress, outputs, and tool calls with custom UI components in real-time. It bridges the gap between AI
-agents and user interfaces. As your agent processes information and makes decisions, you can render custom UI components that:
+Generative UI lets you render your agent's state, progress, outputs, and tool calls with custom UI components in real-time. As your agent processes information and makes decisions, you can render custom UI components that show loading states, display structured data, create interactive elements, and animate transitions.
 
-- Show loading states and progress indicators
-- Display structured data in tables, cards, or charts
-- Create interactive elements for user input
-- Animate transitions between different states
-
-## How can I use this?
-
-To get started, you first need to decide what is going to be backing your generative UI. There are three main variants of Generative UI with CopilotKit for LangGraph.
+## Choose your approach
 
 <Cards>
   <Card
-    icon={<ServerIcon className="text-primary" />}
-    title="Backend Tools"
-    description="Render your agent's tool calls with custom UI components"
-    href="/langgraph/generative-ui/backend-tools"
+    icon={<Eye className="text-primary" />}
+    title="Display Components"
+    description="Register React components as tools your agent can render in the chat."
+    href="/langgraph/generative-ui/display"
   />
   <Card
-    icon={<SquareMousePointerIcon className="text-primary"/>}
-    title="Frontend Tools"
-    description="Provide your agent with client-side tools to show custom components and drive the UI."
-    href="/langgraph/generative-ui/frontend-tools"
+    icon={<CirclePause className="text-primary"/>}
+    title="Interactive Components"
+    description="Create approval flows where the agent pauses and waits for human input."
+    href="/langgraph/generative-ui/interactive"
   />
   <Card
-    className="col-span-2"
-    icon={<BotIcon className="text-primary"/>}
-    title="Agent State"
-    description="Render your agent's state, progress, and outputs with custom UI components."
-    href="/langgraph/generative-ui/agentic"
+    icon={<Server className="text-primary"/>}
+    title="Tool Rendering"
+    description="Render your agent's backend tool calls with custom UI components."
+    href="/langgraph/generative-ui/tool-rendering"
+  />
+  <Card
+    icon={<Bot className="text-primary"/>}
+    title="State Rendering"
+    description="Render your agent's state with custom UI components in real-time."
+    href="/langgraph/generative-ui/state-rendering"
+  />
+  <Card
+    icon={<Monitor className="text-primary"/>}
+    title="MCP Apps"
+    description="Render interactive UI from MCP servers directly in your chat."
+    href="/langgraph/generative-ui/mcp-apps"
+  />
+  <Card
+    icon={<FileJson className="text-primary"/>}
+    title="A2UI"
+    description="Render declarative UI using the A2UI specification."
+    href="/langgraph/generative-ui/a2ui"
   />
 </Cards>

@@ -29,13 +29,11 @@ const INTEGRATION_ICONS: Record<
   IntegrationId,
   ComponentType<{ className?: string }>
 > = {
-  a2a: A2AIcon,
   adk: AdkIcon,
   ag2: Ag2Icon,
   "agent-spec": AgentSpecMarkIcon,
   agno: AgnoIcon,
   "crewai-flows": CrewaiIcon,
-  "crewai-crews": CrewaiIcon,
   "direct-to-llm": DirectToLlmIcon,
   langgraph: LanggraphIcon,
   llamaindex: LlamaIndexIcon,
@@ -43,6 +41,7 @@ const INTEGRATION_ICONS: Record<
   "pydantic-ai": PydanticAiIcon,
   "microsoft-agent-framework": MicrosoftIcon,
   "aws-strands": AwsStrandsIcon,
+  a2a: A2AIcon,
 };
 
 // Build integrations list from canonical order

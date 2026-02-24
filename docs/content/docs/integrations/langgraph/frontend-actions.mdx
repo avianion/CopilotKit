@@ -2,6 +2,7 @@
 title: Frontend Tools
 icon: "lucide/Wrench"
 description: Create frontend tools and use them within your LangGraph agent.
+hideTOC: true
 ---
 import InstallSDKSnippet from "@/snippets/install-sdk.mdx"
 import RunAndConnect from "@/snippets/integrations/langgraph/run-and-connect.mdx"
@@ -45,27 +46,23 @@ Use frontend tools when you need your agent to interact with client-side primiti
     <Step>
         ### Create a frontend tool
 
-        First, you'll need to create a frontend tool using the [useFrontendTool](/reference/v1/hooks/useFrontendTool) hook. Here's a simple one to get you started
+        First, you'll need to create a frontend tool using the [useFrontendTool](/reference/v2/hooks/useFrontendTool) hook. Here's a simple one to get you started
         that says hello to the user.
 
         ```tsx title="page.tsx"
-        import { useFrontendTool } from "@copilotkit/react-core" // [!code highlight]
+        import { z } from "zod";
+        import { useFrontendTool } from "@copilotkit/react-core/v2" // [!code highlight]
 
         export function Page() {
           // ...
 
-          // [!code highlight:15]
+          // [!code highlight:12]
           useFrontendTool({
             name: "sayHello",
             description: "Say hello to the user",
-            parameters: [
-              {
-                name: "name",
-                type: "string",
-                description: "The name of the user to say hello to",
-                required: true,
-              },
-            ],
+            parameters: z.object({
+              name: z.string().describe("The name of the user to say hello to"),
+            }),
             handler: async ({ name }) => {
               alert(`Hello, ${name}!`);
             },

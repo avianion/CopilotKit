@@ -1,0 +1,141 @@
+---
+title: Client Side
+icon: "lucide/Wrench"
+description: Create approval flows where the agent pauses and waits for human input.
+---
+import InstallSDKSnippet from "@/snippets/install-sdk.mdx"
+import { IframeSwitcher } from "@/components/content"
+import RunAndConnect from "@/snippets/integrations/langgraph/run-and-connect.mdx"
+import FrontEndToolsImpl from "@/snippets/integrations/langgraph/frontend-tools.mdx"
+import { Tabs, Tab } from "fumadocs-ui/components/tabs"
+
+<IframeSwitcher
+  id="frontend-tools-based-hitl-example"
+  exampleUrl="https://feature-viewer.copilotkit.ai/langgraph/feature/human_in_the_loop?sidebar=false&chatDefaultOpen=false"
+  codeUrl="https://feature-viewer.copilotkit.ai/langgraph/feature/human_in_the_loop?view=code&sidebar=false&codeLayout=tabs"
+  exampleLabel="Demo"
+  codeLabel="Code"
+  height="700px"
+/>
+
+## What is this?
+
+`useHumanInTheLoop` creates a frontend tool that pauses agent execution until the user responds. The agent calls the tool, CopilotKit renders your component with a `respond` callback, and the agent resumes with the user's response.
+
+Unlike [interrupt-based](/langgraph/generative-ui/interactive/interrupt-based) interactive UI, client-side HITL:
+- Runs entirely on the frontend — no `interrupt()` needed in your agent
+- The agent **is aware** of the tool and its response
+- Works with any agentic backend, not just LangGraph
+
+## When should I use this?
+
+Use client-side interactive UI when you need:
+- Approval/rejection flows (e.g. "Run this command?")
+- User decisions that the agent should know about
+- Confirmation dialogs with structured responses
+- Any flow where the agent pauses for human judgment
+
+## Implementation
+
+<Steps>
+    <Step>
+      ### Run and connect your agent
+      <RunAndConnect components={props.components} />
+    </Step>
+
+    <Step>
+        ### Create a human-in-the-loop tool
+
+        Use the `useHumanInTheLoop` hook to register a tool that renders interactive UI. The `respond` callback is only available during the `Executing` status — when the agent is waiting for human input.
+
+        ```tsx title="page.tsx"
+        import { useHumanInTheLoop } from "@copilotkit/react-core/v2" // [!code highlight]
+        import { z } from "zod";
+
+        export function Page() {
+          // ...
+
+          // [!code highlight:20]
+          useHumanInTheLoop({
+            name: "humanApprovedCommand",
+            description: "Ask human for approval to run a command.",
+            parameters: z.object({
+              command: z.string().describe("The command to run"),
+            }),
+            render: ({ args, respond, status }) => {
+              if (status !== "executing") return <></>;
+              return (
+                <div>
+                  <pre>{args.command}</pre>
+                  {/* [!code highlight:2] */}
+                  <button onClick={() => respond?.(`Command is APPROVED`)}>Approve</button>
+                  <button onClick={() => respond?.(`Command is DENIED`)}>Deny</button>
+                </div>
+              );
+            },
+          });
+
+          // ...
+        }
+        ```
+
+        <Callout type="info" title="Status lifecycle">
+          The render function is called at three stages:
+          - **InProgress** — tool call is streaming, `respond` is `undefined`
+          - **Executing** — args are complete, `respond` is available
+          - **Complete** — user responded, `result` contains the response
+        </Callout>
+    </Step>
+    <Step>
+        ### Install the CopilotKit SDK
+
+        Now, we'll need to modify the agent to access these frontend tools. In your terminal, navigate to your agent's folder and continue from there!
+
+        <InstallSDKSnippet components={props.components}/>
+    </Step>
+    <Step>
+        ### Inheriting from CopilotKitState
+
+        To access the frontend tools provided by CopilotKit, you can inherit from CopilotKitState in your agent's state definition:
+
+        <Tabs groupId="language_langgraph_agent" items={['Python', 'TypeScript']} default="Python" persist>
+            <Tab value="Python">
+                ```python title="agent.py"
+                from copilotkit import CopilotKitState # [!code highlight]
+
+                class YourAgentState(CopilotKitState): # [!code highlight]
+                    your_additional_properties: str
+                ```
+            </Tab>
+            <Tab value="TypeScript">
+                ```typescript title="agent-js/src/agent.ts"
+                import { Annotation } from "@langchain/langgraph";
+                import { CopilotKitStateAnnotation } from "@copilotkit/sdk-js/langgraph"; // [!code highlight]
+
+                export const YourAgentStateAnnotation = Annotation.Root({
+                    yourAdditionalProperty: Annotation<string>,
+                    ...CopilotKitStateAnnotation.spec, // [!code highlight]
+                });
+                export type YourAgentState = typeof YourAgentStateAnnotation.State;
+                ```
+            </Tab>
+        </Tabs>
+
+        By doing this, your agent's state will include the `copilotkit` property, which contains the frontend tools that can be accessed and invoked.
+    </Step>
+    <Step>
+        ### Accessing Frontend Tools
+
+        Once your agent's state includes the `copilotkit` property, you can access the frontend tools and utilize them within your agent's logic.
+
+        Here's how you can call a frontend tool from your agent:
+
+        <FrontEndToolsImpl components={props.components} />
+
+        These tools are automatically populated by CopilotKit and are compatible with LangChain's tool call definitions, making it straightforward to integrate them into your agent's workflow.
+    </Step>
+    <Step>
+        ### Give it a try!
+        You've now given your agent the ability to pause and ask for human approval. The agent will wait for the user's response before continuing.
+    </Step>
+</Steps>

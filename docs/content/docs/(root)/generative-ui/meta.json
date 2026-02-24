@@ -1,7 +1,12 @@
 {
   "title": "Generative UI",
+  "defaultOpen": true,
   "pages": [
-    "index",
-    "specs"
+    "display",
+    "interactive",
+    "tool-rendering",
+    "state-rendering",
+    "mcp-apps",
+    "a2ui"
   ]
 }

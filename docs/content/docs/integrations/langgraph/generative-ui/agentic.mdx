@@ -167,78 +167,54 @@ is a situation where a user and an agent are working together to solve a problem
     </Tabs>
   </Step>
   <Step>
-    ### Render state of the agent in the chat
-    Now we can utilize `useCoAgentStateRender` to render the state of our agent **in the chat**.
+    ### Render state of the agent
+    Now we can use the `useAgent` hook to access and render the state of our agent.
 
     ```tsx title="app/page.tsx"
-    import { useCoAgentStateRender } from "@copilotkit/react-core";
-
-    // For type safety, redefine the state of the agent. If you're using
-    // using LangGraph JS you can import the type here and share it.
-    type AgentState = {
-      searches: {
-        query: string;
-        done: boolean;
-      }[];
-    };
+    import { useAgent } from "@copilotkit/react-core/v2"; // [!code highlight]
 
     function YourMainContent() {
-      // ...
-
-      // [!code highlight:13]
-      // styles omitted for brevity
-      useCoAgentStateRender<AgentState>({
-        name: "sample_agent", // the name the agent is served as
-        render: ({ state }) => (
-          <div>
-            {state.searches?.map((search, index) => (
-              <div key={index}>
-                {search.done ? "✅" : "❌"} {search.query}{search.done ? "" : "..."}
-              </div>
-            ))}
-          </div>
-        ),
+      // [!code highlight:3]
+      const { agent } = useAgent({
+        agentId: "sample_agent", // the name the agent is served as
       });
 
-      // ...
-
-      return <div>...</div>;
-    }
-    ```
-  </Step>
-  <Step>
-    ### Render state outside of the chat
-    You can also render the state of your agent **outside of the chat**. This is useful when you want to render the state of your agent anywhere
-    other than the chat.
-
-    ```tsx title="app/page.tsx"
-    import { useCoAgent } from "@copilotkit/react-core"; // [!code highlight]
-    // ...
-
-    // Define the state of the agent, should match the state of the agent in your LangGraph.
-    type AgentState = {
-      searches: {
-        query: string;
-        done: boolean;
-      }[];
-    };
-
-    function YourMainContent() {
-      // ...
-
-      // [!code highlight:3]
-      const { state } = useCoAgent<AgentState>({
-        name: "sample_agent", // the name the agent is served as
-      })
+      const searches = (agent.state.searches as { query: string; done: boolean }[]) ?? [];
 
       // ...
 
       return (
         <div>
-          {/* ... */}
+          {searches.map((search, index) => (
+            <div key={index}>
+              {search.done ? "✅" : "❌"} {search.query}{search.done ? "" : "..."}
+            </div>
+          ))}
+        </div>
+      );
+    }
+    ```
+  </Step>
+  <Step>
+    ### Render state outside of the chat
+    You can also render the state of your agent **outside of the chat**. The `useAgent` hook works anywhere in your app.
+
+    ```tsx title="app/page.tsx"
+    import { useAgent } from "@copilotkit/react-core/v2"; // [!code highlight]
+
+    function YourMainContent() {
+      // [!code highlight:3]
+      const { agent } = useAgent({
+        agentId: "sample_agent", // the name the agent is served as
+      });
+
+      const searches = (agent.state.searches as { query: string; done: boolean }[]) ?? [];
+
+      return (
+        <div>
           <div className="flex flex-col gap-2 mt-4">
             {/* [!code highlight:5] */}
-            {state.searches?.map((search, index) => (
+            {searches.map((search, index) => (
               <div key={index} className="flex flex-row">
                 {search.done ? "✅" : "❌"} {search.query}
               </div>

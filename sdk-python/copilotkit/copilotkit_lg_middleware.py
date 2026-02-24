@@ -17,7 +17,7 @@ Example:
 import json
 from typing import Any, Callable, Awaitable, ClassVar, List
 
-from langchain_core.messages import AIMessage, SystemMessage
+from langchain_core.messages import AIMessage, SystemMessage, ToolMessage
 from langchain.agents.middleware import (
     AgentMiddleware,
     AgentState,
@@ -76,6 +76,47 @@ class CopilotKitMiddleware(AgentMiddleware[StateSchema, Any]):
 
         return await handler(request.override(tools=merged_tools))
 
+    @staticmethod
+    def _sanitize_orphaned_tool_calls(messages: list) -> list:
+        """Strip tool_use blocks that have no matching tool_result.
+
+        Providers like Anthropic strictly require every tool_use to have a
+        corresponding tool_result in the message history. After after_agent
+        restores intercepted frontend tool calls for the runtime to process,
+        those tool_results may not be present when the agent is invoked again.
+        """
+        tool_result_ids = {
+            msg.tool_call_id
+            for msg in messages
+            if isinstance(msg, ToolMessage)
+        }
+
+        sanitized = []
+        changed = False
+        for msg in messages:
+            if isinstance(msg, AIMessage) and getattr(msg, "tool_calls", None):
+                valid = [c for c in msg.tool_calls if c.get("id") in tool_result_ids]
+                if len(valid) != len(msg.tool_calls):
+                    content = msg.content
+                    if isinstance(content, list):
+                        content = [
+                            b for b in content
+                            if not (
+                                isinstance(b, dict)
+                                and b.get("type") == "tool_use"
+                                and b.get("id") not in tool_result_ids
+                            )
+                        ]
+                    msg = AIMessage(
+                        content=content or "",
+                        tool_calls=valid,
+                        id=msg.id,
+                    )
+                    changed = True
+            sanitized.append(msg)
+
+        return sanitized if changed else messages
+
     # Inject app context before agent runs
     def before_agent(
             self,
@@ -87,16 +128,25 @@ class CopilotKitMiddleware(AgentMiddleware[StateSchema, Any]):
         if not messages:
             return None
 
+        # Sanitize orphaned tool_use blocks from previous invocations
+        original_messages = messages
+        messages = self._sanitize_orphaned_tool_calls(messages)
+        messages_changed = messages is not original_messages
+
         # Get app context from state or runtime
         copilotkit_state = state.get("copilotkit", {})
         app_context = copilotkit_state.get("context") or getattr(runtime, "context", None)
 
         # Check if app_context is missing or empty
-        if not app_context:
-            return None
+        has_app_context = bool(app_context)
         if isinstance(app_context, str) and app_context.strip() == "":
-            return None
+            has_app_context = False
         if isinstance(app_context, dict) and len(app_context) == 0:
+            has_app_context = False
+
+        if not has_app_context:
+            if messages_changed:
+                return {**state, "messages": messages}
             return None
 
         # Create the context content
