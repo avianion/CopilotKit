@@ -138,7 +138,10 @@ const IntegrationsGrid: React.FC<IntegrationsGridProps> = ({
             </div>
             <div>
               <div className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                {integration.label} <span className="text-muted-foreground group-hover:text-primary">&rsaquo;</span>
+                {integration.label}{" "}
+                <span className="text-muted-foreground group-hover:text-primary">
+                  &rsaquo;
+                </span>
               </div>
               <div className="text-sm text-muted-foreground leading-relaxed mt-0.5">
                 {integration.description}

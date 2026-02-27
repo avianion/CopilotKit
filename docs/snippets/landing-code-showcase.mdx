@@ -9,7 +9,7 @@ import { MessageSquare, Layers, Code, Bot, Server, BookOpen, Play, Book } from "
 ]}>
   <CodePanel>
     ```tsx title="app.tsx"
-    import { CopilotKit } from "@copilotkit/react-core";
+    import { CopilotKit } from "@copilotkit/react-core/v2";
     import { CopilotSidebar } from "@copilotkit/react-core/v2";
     import "@copilotkit/react-ui/v2/styles.css";
 
@@ -25,7 +25,7 @@ import { MessageSquare, Layers, Code, Bot, Server, BookOpen, Play, Book } from "
   </CodePanel>
   <CodePanel>
     ```tsx title="chat.tsx"
-    import { useAgent } from "@copilotkit/react-core";
+    import { useAgent } from "@copilotkit/react-core/v2";
 
     export default function Chat() {
       const { run, messages, isRunning } = useAgent();
@@ -46,7 +46,7 @@ import { MessageSquare, Layers, Code, Bot, Server, BookOpen, Play, Book } from "
   <CodePanel>
     ```tsx title="weather-card.tsx"
     import { z } from "zod";
-    import { useComponent } from "@copilotkit/react-core";
+    import { useComponent } from "@copilotkit/react-core/v2";
 
     useComponent({
       name: "showWeather",

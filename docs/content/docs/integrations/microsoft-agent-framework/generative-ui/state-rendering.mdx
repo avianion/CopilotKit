@@ -306,10 +306,10 @@ is a situation where a user and an agent are working together to solve a problem
   </Step>
   <Step>
     ### Render state of the agent in the chat
-    Now we can utilize `useCoAgentStateRender` to render the state of our agent **in the chat**.
+    Now we can utilize `useAgent` with a `render` function to render the state of our agent **in the chat**.
 
     ```tsx title="app/page.tsx"
-    import { useCoAgentStateRender } from "@copilotkit/react-core";
+    import { useAgent } from "@copilotkit/react-core/v2";
 
     // For type safety, define the state type matching your agent's state snapshot
     type AgentState = {
@@ -324,11 +324,11 @@ is a situation where a user and an agent are working together to solve a problem
 
       // [!code highlight:13]
       // styles omitted for brevity
-      useCoAgentStateRender<AgentState>({
+      useAgent<AgentState>({
         name: "sample_agent", // the name the agent is served as
-        render: ({ state }) => (
+        render: ({ agentState }) => (
           <div>
-            {state.searches?.map((search, index) => (
+            {agentState.searches?.map((search, index) => (
               <div key={index}>
                 {search.done ? "✅" : "❌"} {search.query}{search.done ? "" : "..."}
               </div>
@@ -349,7 +349,7 @@ is a situation where a user and an agent are working together to solve a problem
     other than the chat.
 
     ```tsx title="app/page.tsx"
-    import { useCoAgent } from "@copilotkit/react-core"; // [!code highlight]
+    import { useAgent } from "@copilotkit/react-core/v2"; // [!code highlight]
     // ...
 
     // Define the state type matching your agent's state snapshot
@@ -364,7 +364,7 @@ is a situation where a user and an agent are working together to solve a problem
       // ...
 
       // [!code highlight:3]
-      const { state } = useCoAgent<AgentState>({
+      const { agentState } = useAgent<AgentState>({
         name: "sample_agent", // the name the agent is served as
       })
 
@@ -375,7 +375,7 @@ is a situation where a user and an agent are working together to solve a problem
           {/* ... */}
           <div className="flex flex-col gap-2 mt-4">
             {/* [!code highlight:5] */}
-            {state.searches?.map((search, index) => (
+            {agentState.searches?.map((search, index) => (
               <div key={index} className="flex flex-row">
                 {search.done ? "✅" : "❌"} {search.query}
               </div>

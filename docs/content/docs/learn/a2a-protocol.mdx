@@ -151,13 +151,13 @@ To use A2A agents with CopilotKit, you need to first install the CopilotKit midd
     The tool the middleware provides for communication is called `send_message_to_a2a_agent`.
 
     ```tsx title="components/chat.tsx"
-    import { useCopilotAction } from "@copilotkit/react-core"
-    import { Markdown } from "@copilotkit/react-ui"
+    import { useFrontendTool } from "@copilotkit/react-core/v2"
+    import { Markdown } from "@copilotkit/react-core/v2"
 
     function YourMainContent() {
       // ...
 
-      useCopilotAction({
+      useFrontendTool({
         name: "send_message_to_a2a_agent",
         description: "Sends a message to an A2A agent",
         available: "frontend",

@@ -134,13 +134,13 @@ If you're seeing this error, it means CopilotKit couldn't find the LangGraph age
 
         ```tsx title="MyComponent.tsx"
         // Your React component
-        useCoAgent({
+        useAgent({
             name: "my_agent", // [!code focus] This must match exactly
         });
         ```
     </Accordion>
     <Accordion title="Check your agent name in useCoAgentStateRender">
-        Make sure the that the agent defined in `langgraph.json` matches what you use n `useCoAgent` hook:
+        Make sure the that the agent defined in `langgraph.json` matches what you use in the `useAgent` hook:
 
         ```json title="langgraph.json"
         {

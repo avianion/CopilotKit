@@ -38,11 +38,11 @@ You can use this when you want to provide the user with a way to update the inpu
 
   </Step>
   <Step>
-    ### Calling `setState` function from the `useCoAgent` hook
-    `useCoAgent` returns a `setState` function that you can use to update the agent state. Calling this will update the agent state and trigger a rerender of anything that depends on the agent state.
+    ### Calling `setAgentState` function from the `useAgent` hook
+    `useAgent` returns a `setAgentState` function that you can use to update the agent state. Calling this will update the agent state and trigger a rerender of anything that depends on the agent state.
 
     ```tsx title="ui/app/page.tsx"
-    import { useCoAgent } from "@copilotkit/react-core"; // [!code highlight]
+    import { useAgent } from "@copilotkit/react-core/v2"; // [!code highlight]
 
     // Define the agent state type, should match the actual state of your agent
     type AgentState = {
@@ -51,7 +51,7 @@ You can use this when you want to provide the user with a way to update the inpu
 
     // Example usage in a pseudo React component
     function YourMainContent() {
-      const { state, setState } = useCoAgent({ // [!code highlight]
+      const { agentState, setAgentState } = useAgent({ // [!code highlight]
         name: "research_crew",
         initialState: { // optionally provide an initial state
           inputs: {
@@ -71,11 +71,11 @@ You can use this when you want to provide the user with a way to update the inpu
           </label>
           <input
             type="text"
-            value={state.inputs.topic}
+            value={agentState.inputs.topic}
             onChange={(e) =>
-              setState({
-                ...state,
-                inputs: { ...state.inputs, topic: e.target.value },
+              setAgentState({
+                ...agentState,
+                inputs: { ...agentState.inputs, topic: e.target.value },
               })
             }
           />
@@ -87,6 +87,6 @@ You can use this when you want to provide the user with a way to update the inpu
   </Step>
   <Step>
     ### Give it a try!
-    You can now use the `setState` function to update the crew `inputs` and `state` to read it. Try setting  a topic and talking to your agent.
+    You can now use the `setAgentState` function to update the crew `inputs` and `agentState` to read it. Try setting  a topic and talking to your agent.
   </Step>
 </Steps>

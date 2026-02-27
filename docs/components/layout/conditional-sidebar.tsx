@@ -111,9 +111,7 @@ export default function ConditionalSidebar({
   }
 
   if (isLearnRoute && learnPageTree) {
-    return (
-      <Sidebar pageTree={learnPageTree} showIntegrationSelector={false} />
-    );
+    return <Sidebar pageTree={learnPageTree} showIntegrationSelector={false} />;
   }
 
   if (isReferenceRoute && referencePageTree) {

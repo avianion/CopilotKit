@@ -26,7 +26,7 @@ export function CodeShowcase({ tabs, children }: CodeShowcaseProps) {
 
   const handleCopy = () => {
     const codeEl = document.querySelector(
-      `[data-code-panel="${activeIndex}"] pre code`
+      `[data-code-panel="${activeIndex}"] pre code`,
     );
     if (codeEl) {
       navigator.clipboard.writeText(codeEl.textContent || "");
@@ -74,7 +74,7 @@ export function CodeShowcase({ tabs, children }: CodeShowcaseProps) {
                     "flex items-center justify-between w-full px-4 py-2 text-sm font-medium transition-colors cursor-pointer",
                     i === activeIndex
                       ? "text-primary bg-accent/50"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <div className="flex items-center gap-2.5">
@@ -140,7 +140,7 @@ export function CodeShowcase({ tabs, children }: CodeShowcaseProps) {
                   "flex items-center gap-2 px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors rounded-md cursor-pointer",
                   i === activeIndex
                     ? "text-primary bg-accent/50"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <span className="flex-shrink-0 [&_svg]:h-3.5 [&_svg]:w-3.5">

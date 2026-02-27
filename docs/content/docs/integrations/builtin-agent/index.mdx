@@ -1,0 +1,26 @@
+---
+title: "BuiltIn Agent"
+description: "Use CopilotKit's built-in agent with OpenAI, Anthropic, or Google models — no external agent framework required."
+---
+
+The **BuiltIn Agent** is CopilotKit's simplest agent option. It uses a direct LLM connection with support for tools, generative UI, and all CopilotKit features — without requiring an external agent framework like LangGraph or CrewAI.
+
+## When to use BuiltIn Agent
+
+- You want a quick setup without configuring an agent framework
+- Your use case is primarily chat + tools (frontend and server tools)
+- You want to use OpenAI, Anthropic, or Google models directly
+- You're prototyping or building a simpler agent
+
+## Key Features
+
+- **Server Tools** — Define backend tools with `defineTool()` and Zod schemas
+- **MCP Servers** — Connect to MCP servers for extended capabilities
+- **Model Selection** — Support for OpenAI, Anthropic, and Google models
+- **Frontend Tools** — Full support for `useFrontendTool`, `useComponent`, `useHumanInTheLoop`
+- **Generative UI** — Rich component rendering in chat
+- **Prebuilt Components** — CopilotChat, CopilotSidebar, CopilotPopup
+
+## Getting Started
+
+Head to the [Quickstart](/builtin-agent/quickstart) to get set up in minutes.

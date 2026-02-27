@@ -149,11 +149,11 @@ is a situation where a user and an agent are working together to solve a problem
   </Step>
   <Step>
     ### Render state of the agent in the chat
-    Now we can utilize `useCoAgentStateRender` to render the state of our agent **in the chat**.
+    Now we can utilize `useAgent` with a `render` function to render the state of our agent **in the chat**.
 
     ```tsx title="app/page.tsx"
     // ...
-    import { useCoAgentStateRender } from "@copilotkit/react-core";
+    import { useAgent } from "@copilotkit/react-core/v2";
     // ...
 
     // Define the state of the agent, should match the state of your LlamaIndex Agent.
@@ -169,11 +169,11 @@ is a situation where a user and an agent are working together to solve a problem
 
       // [!code highlight:13]
       // styles omitted for brevity
-      useCoAgentStateRender<AgentState>({
+      useAgent<AgentState>({
         name: "my_agent", // MUST match the agent name in CopilotRuntime
-        render: ({ state }) => (
+        render: ({ agentState }) => (
           <div>
-            {state.searches?.map((search, index) => (
+            {agentState.searches?.map((search, index) => (
               <div key={index}>
                 {search.done ? "✅" : "❌"} {search.query}{search.done ? "" : "..."}
               </div>
@@ -199,7 +199,7 @@ is a situation where a user and an agent are working together to solve a problem
     other than the chat.
 
     ```tsx title="app/page.tsx"
-    import { useCoAgent } from "@copilotkit/react-core"; // [!code highlight]
+    import { useAgent } from "@copilotkit/react-core/v2"; // [!code highlight]
     // ...
 
     // Define the state of the agent, should match the state of your LlamaIndex Agent.
@@ -214,7 +214,7 @@ is a situation where a user and an agent are working together to solve a problem
       // ...
 
       // [!code highlight:3]
-      const { state } = useCoAgent<AgentState>({
+      const { agentState } = useAgent<AgentState>({
         name: "my_agent", // MUST match the agent name in CopilotRuntime
       })
 
@@ -225,7 +225,7 @@ is a situation where a user and an agent are working together to solve a problem
           {/* ... */}
           <div className="flex flex-col gap-2 mt-4">
             {/* [!code highlight:5] */}
-            {state.searches?.map((search, index) => (
+            {agentState.searches?.map((search, index) => (
               <div key={index} className="flex flex-row">
                 {search.done ? "✅" : "❌"} {search.query}
               </div>

@@ -50,16 +50,16 @@ Crew-based agents are ideal for HITL because they preserve execution state and c
 
 
   <Step>
-    ### Add a `useCopilotAction` to your frontend
+    ### Add a `useFrontendTool` to your frontend
 
     Create a component that displays the crew’s output and asks the user for approval before proceeding.
 
     ```tsx title="ui/app/page.tsx"
-    import { useCopilotAction } from "@copilotkit/react-core";
-    import { Markdown } from "@copilotkit/react-ui";
+    import { useFrontendTool } from "@copilotkit/react-core/v2";
+    import { Markdown } from "@copilotkit/react-core/v2";
 
     function YourMainContent() {
-      useCopilotAction({
+      useFrontendTool({
         name: "crew_requesting_feedback",
         description: "Request feedback from the user on the crew's output",
         renderAndWaitForResponse: ({ args, respond, status }) => (

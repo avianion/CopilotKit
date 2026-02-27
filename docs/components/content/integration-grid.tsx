@@ -1,17 +1,17 @@
-import Link from "next/link"
-import { AgentSpecMarkIcon } from "@/lib/icons/custom-icons"
-import AdkIcon from "@/components/ui/icons/adk"
-import Ag2Icon from "@/components/ui/icons/ag2"
-import CrewaiIcon from "@/components/ui/icons/crewai"
-import DirectToLlmIcon from "@/components/ui/icons/direct-to-llm"
-import LanggraphIcon from "@/components/ui/icons/langgraph"
-import LlamaIndexIcon from "@/components/ui/icons/llama-index"
-import MastraIcon from "@/components/ui/icons/mastra"
-import AgnoIcon from "@/components/ui/icons/agno"
-import PydanticAiIcon from "@/components/ui/icons/pydantic-ai"
-import { MicrosoftIcon } from "@/components/ui/icons/microsoft"
-import { AwsStrandsIcon } from "@/components/ui/icons/aws-strands"
-import type { ComponentType } from "react"
+import Link from "next/link";
+import { AgentSpecMarkIcon } from "@/lib/icons/custom-icons";
+import AdkIcon from "@/components/ui/icons/adk";
+import Ag2Icon from "@/components/ui/icons/ag2";
+import CrewaiIcon from "@/components/ui/icons/crewai";
+import DirectToLlmIcon from "@/components/ui/icons/direct-to-llm";
+import LanggraphIcon from "@/components/ui/icons/langgraph";
+import LlamaIndexIcon from "@/components/ui/icons/llama-index";
+import MastraIcon from "@/components/ui/icons/mastra";
+import AgnoIcon from "@/components/ui/icons/agno";
+import PydanticAiIcon from "@/components/ui/icons/pydantic-ai";
+import { MicrosoftIcon } from "@/components/ui/icons/microsoft";
+import { AwsStrandsIcon } from "@/components/ui/icons/aws-strands";
+import type { ComponentType } from "react";
 
 export type IntegrationName =
   | "direct-to-llm"
@@ -25,13 +25,13 @@ export type IntegrationName =
   | "agno"
   | "ag2"
   | "agent-spec"
-  | "llamaindex"
+  | "llamaindex";
 
 interface Integration {
-  name: IntegrationName
-  label: string
-  description: string
-  icon: ComponentType<{ className?: string }>
+  name: IntegrationName;
+  label: string;
+  description: string;
+  icon: ComponentType<{ className?: string }>;
 }
 
 const INTEGRATIONS: Integration[] = [
@@ -107,25 +107,33 @@ const INTEGRATIONS: Integration[] = [
     description: "Framework for building LLM-powered data applications.",
     icon: LlamaIndexIcon,
   },
-]
+];
 
 interface IntegrationGridProps {
-  path?: string
-  include?: IntegrationName[]
-  exclude?: IntegrationName[]
+  path?: string;
+  include?: IntegrationName[];
+  exclude?: IntegrationName[];
 }
 
-export const IntegrationGrid = ({ path = "", include, exclude }: IntegrationGridProps) => {
+export const IntegrationGrid = ({
+  path = "",
+  include,
+  exclude,
+}: IntegrationGridProps) => {
   const filtered = INTEGRATIONS.filter((integration) => {
-    if (include && !include.includes(integration.name)) return false
-    if (exclude && exclude.includes(integration.name)) return false
-    return true
-  })
+    if (include && !include.includes(integration.name)) return false;
+    if (exclude && exclude.includes(integration.name)) return false;
+    return true;
+  });
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8 mt-6 mb-16 not-prose">
       {filtered.map(({ name, label, description, icon: Icon }) => (
-        <Link key={name} href={`/${name}/${path}`} className="group flex items-start gap-4 no-underline">
+        <Link
+          key={name}
+          href={`/${name}/${path}`}
+          className="group flex items-start gap-4 no-underline"
+        >
           <div className="shrink-0 mt-1">
             <Icon className="h-6 w-6 text-primary" />
           </div>
@@ -133,10 +141,12 @@ export const IntegrationGrid = ({ path = "", include, exclude }: IntegrationGrid
             <div className="font-semibold text-foreground group-hover:text-primary transition-colors">
               {label} &rsaquo;
             </div>
-            <div className="text-sm text-muted-foreground leading-relaxed mt-0.5">{description}</div>
+            <div className="text-sm text-muted-foreground leading-relaxed mt-0.5">
+              {description}
+            </div>
           </div>
         </Link>
       ))}
     </div>
-  )
-}
+  );
+};

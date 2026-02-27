@@ -1,0 +1,55 @@
+---
+title: "Model Selection"
+icon: "lucide/Cpu"
+description: "Choose and configure models for your BuiltIn Agent."
+---
+
+## Supported Models
+
+The BuiltIn Agent supports models from OpenAI, Anthropic, and Google.
+
+### OpenAI
+
+```typescript
+const agent = new BuiltInAgent({
+  name: "assistant",
+  model: "openai:gpt-4o",
+});
+```
+
+Available models: `gpt-4o`, `gpt-4o-mini`, `gpt-4-turbo`, `o1`, `o3-mini`
+
+### Anthropic
+
+```typescript
+const agent = new BuiltInAgent({
+  name: "assistant",
+  model: "anthropic:claude-sonnet-4-6",
+});
+```
+
+Available models: `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`
+
+### Google
+
+```typescript
+const agent = new BuiltInAgent({
+  name: "assistant",
+  model: "google:gemini-2.0-flash",
+});
+```
+
+## Environment Variables
+
+Set the appropriate API key for your model provider:
+
+```bash
+# OpenAI
+OPENAI_API_KEY=sk-...
+
+# Anthropic
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Google
+GOOGLE_API_KEY=...
+```

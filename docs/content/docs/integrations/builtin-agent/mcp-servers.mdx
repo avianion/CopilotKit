@@ -1,0 +1,41 @@
+---
+title: "MCP Servers"
+icon: "lucide/Plug"
+description: "Connect MCP servers to your BuiltIn Agent."
+---
+
+## What are MCP Servers?
+
+MCP (Model Context Protocol) servers provide additional tools and capabilities to your agent. The BuiltIn Agent supports connecting to MCP servers via HTTP or SSE transports.
+
+## Configuration
+
+```typescript title="src/copilotkit.ts"
+import { BuiltInAgent } from "@copilotkitnext/agent";
+
+const builtInAgent = new BuiltInAgent({
+  name: "assistant",
+  model: "openai:gpt-4o",
+  mcpServers: [
+    {
+      name: "my-mcp-server",
+      url: "https://my-mcp-server.example.com/sse",
+    },
+  ],
+});
+```
+
+## Multiple Servers
+
+You can connect multiple MCP servers:
+
+```typescript
+const builtInAgent = new BuiltInAgent({
+  name: "assistant",
+  model: "openai:gpt-4o",
+  mcpServers: [
+    { name: "search", url: "https://search-mcp.example.com/sse" },
+    { name: "database", url: "https://db-mcp.example.com/sse" },
+  ],
+});
+```

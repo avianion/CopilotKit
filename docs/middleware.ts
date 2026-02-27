@@ -1,6 +1,24 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// All framework slugs for pattern-based redirects
+const FRAMEWORKS = [
+  "langgraph",
+  "adk",
+  "agno",
+  "crewai-crews",
+  "crewai-flows",
+  "pydantic-ai",
+  "llamaindex",
+  "mastra",
+  "agent-spec",
+  "ag2",
+  "microsoft-agent-framework",
+  "aws-strands",
+  "a2a",
+  "builtin-agent",
+];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -18,11 +36,11 @@ export function middleware(request: NextRequest) {
     "/coagents/videos": "/langgraph/videos",
     "/coagents/tutorials": "/langgraph/tutorials",
     "/coagents/concepts": "/langgraph/concepts",
-    "/coagents/frontend-actions": "/langgraph/frontend-actions",
+    "/coagents/frontend-actions": "/langgraph/frontend-tools",
     "/coagents/generative-ui": "/langgraph/generative-ui",
 
     // Common typos and variations
-    "/direct-to-llm/guide": "/direct-to-llm/guides",
+    "/direct-to-llm/guide": "/builtin-agent/guides",
     "/langgraph/guide": "/langgraph/guides",
     "/mastra/guide": "/mastra/guides",
     "/agno/guide": "/agno/guides",
@@ -42,8 +60,8 @@ export function middleware(request: NextRequest) {
     "/getting-started": "/quickstart",
     "/start": "/quickstart",
 
-    // Frontend tools variations
-    "/frontend-tools": "/frontend-actions",
+    // Frontend actions → frontend tools (renamed in restructure)
+    "/frontend-actions": "/frontend-tools",
 
     // Contributing paths
     "/contributing/code-contributions/package-linking":
@@ -61,41 +79,53 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(newPath, request.url));
   }
 
+  // Per-framework pattern redirects (docs restructure 2026-02)
+  for (const fw of FRAMEWORKS) {
+    const prefix = `/${fw}/`;
+    if (!pathname.startsWith(prefix)) continue;
+    const rest = pathname.slice(prefix.length);
+
+    // Renamed pages
+    const renames: Record<string, string> = {
+      "agentic-chat-ui": "prebuilt-components",
+      "use-agent-hook": "programmatic-control",
+      "frontend-actions": "frontend-tools",
+      "vibe-coding-mcp": "coding-agents",
+      // Old generative-ui pages → new locations
+      "generative-ui/agentic": "generative-ui/your-components/display-only",
+      "generative-ui/backend-tools": "generative-ui/tool-rendering",
+      "generative-ui/frontend-tools": "frontend-tools",
+      "generative-ui/render-only": "generative-ui/your-components/display-only",
+      "generative-ui/tool-based": "generative-ui/tool-rendering",
+      // Old custom-look-and-feel pages
+      "custom-look-and-feel/bring-your-own-components":
+        "custom-look-and-feel/slots",
+      "custom-look-and-feel/customize-built-in-ui-components":
+        "custom-look-and-feel/slots",
+      "custom-look-and-feel/markdown-rendering": "custom-look-and-feel/slots",
+    };
+
+    if (renames[rest]) {
+      return NextResponse.redirect(
+        new URL(`/${fw}/${renames[rest]}`, request.url),
+      );
+    }
+
+    // Concepts directory → framework root
+    if (rest.startsWith("concepts/") || rest === "concepts") {
+      return NextResponse.redirect(new URL(`/${fw}`, request.url));
+    }
+
+    break; // Only match one framework
+  }
+
   // Handle guide -> guides redirects
   if (pathname.includes("/guide") && !pathname.includes("/guides")) {
     const newPath = pathname.replace("/guide", "/guides");
     return NextResponse.redirect(new URL(newPath, request.url));
   }
 
-
-  // Check for partial matches and suggest alternatives
-  const suggestions = generateSuggestions(pathname);
-
-  if (suggestions.length > 0) {
-    // For now, we'll let the 404 page handle suggestions
-    // In the future, we could redirect to a special 404 page with suggestions
-  }
-
   return NextResponse.next();
-}
-
-function generateSuggestions(pathname: string): string[] {
-  const suggestions: string[] = [];
-
-  // Common patterns that might be typos
-  if (pathname.includes("guide") && !pathname.includes("guides")) {
-    suggestions.push(pathname.replace("guide", "guides"));
-  }
-
-  if (pathname.includes("coagents")) {
-    suggestions.push(pathname.replace("coagents", "langgraph"));
-  }
-
-  if (pathname.includes("/api") && !pathname.includes("/reference")) {
-    suggestions.push("/reference");
-  }
-
-  return suggestions;
 }
 
 export const config = {

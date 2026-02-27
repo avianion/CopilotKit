@@ -44,18 +44,18 @@ You can use this when you want to provide the user with a way to read the output
 
   </Step>
   <Step>
-    ### Use the `useCoAgent` Hook
-    With your agent connected and running all that is left is to call the [useCoAgent](/reference/v1/hooks/useCoAgent) hook, pass the agent's name, and
+    ### Use the `useAgent` Hook
+    With your agent connected and running all that is left is to call the `useAgent` hook, pass the agent's name, and
     optionally provide an initial state.
 
     ```tsx title="ui/app/page.tsx"
-    import { useCoAgent } from "@copilotkit/react-core"; // [!code highlight]
+    import { useAgent } from "@copilotkit/react-core/v2"; // [!code highlight]
 
     // Define the agent state type, should match the actual state of your agent
 
 
     function YourMainContent() {
-      const { state } = useCoAgent({
+      const { agentState } = useAgent({
         name: "research_crew",
         initialState: {
           inputs: {
@@ -73,13 +73,13 @@ You can use this when you want to provide the user with a way to read the output
         <div>
           <h1>Your report:</h1>
           {/* [!code highlight:1] */}
-          <p>{state.outputs}</p>
+          <p>{agentState.outputs}</p>
         </div>
       );
     }
     ```
     <Callout type="info">
-      The `state` in `useCoAgent` is reactive and will automatically update when the agent's state changes.
+      The `agentState` in `useAgent` is reactive and will automatically update when the agent's state changes.
     </Callout>
 
   </Step>
